@@ -1,0 +1,78 @@
+---
+import { Icon } from 'astro-icon/components';
+import { Button } from '@components/odyssey-theme';
+
+export interface Props {
+  title: string;
+  message?: string;
+  icon?: string;
+  actionLabel?: string;
+  actionHref?: string;
+}
+
+const { title, message, icon = 'mdi:inbox-outline', actionLabel, actionHref } = Astro.props;
+---
+
+<div class="empty-state">
+  {icon && (
+    <div class="empty-state__icon">
+      <Icon name={icon} />
+    </div>
+  )}
+  <h3 class="empty-state__title">{title}</h3>
+  {message && <p class="empty-state__message">{message}</p>}
+  {actionLabel && actionHref && (
+    <div class="empty-state__action">
+      <Button href={actionHref}>{actionLabel}</Button>
+    </div>
+  )}
+</div>
+
+<style>
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1.5rem;
+    text-align: center;
+  }
+
+  .empty-state__icon {
+    width: 4rem;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--theme-surface-1);
+    border-radius: 50%;
+    margin-bottom: 1.5rem;
+    opacity: 0.5;
+  }
+
+  .empty-state__icon :global(svg) {
+    width: 2rem;
+    height: 2rem;
+    color: var(--theme-on-surface-1);
+  }
+
+  .empty-state__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--theme-on-bg);
+    margin: 0 0 0.5rem 0;
+  }
+
+  .empty-state__message {
+    font-size: 0.875rem;
+    color: var(--theme-on-bg);
+    opacity: 0.7;
+    margin: 0 0 1.5rem 0;
+    max-width: 400px;
+  }
+
+  .empty-state__action {
+    margin-top: 0.5rem;
+  }
+</style>
+

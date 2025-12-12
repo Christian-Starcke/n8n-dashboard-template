@@ -1,0 +1,166 @@
+---
+import StatusBadge from './StatusBadge.astro';
+import { formatDistanceToNow } from 'date-fns';
+
+export interface Execution {
+  id: string;
+  workflowName: string;
+  status: 'success' | 'error' | 'running' | 'waiting' | 'canceled';
+  startedAt: string;
+  finishedAt?: string;
+  executionTime?: number;
+}
+
+export interface Props {
+  executions: Execution[];
+  showWorkflowName?: boolean;
+}
+
+const { executions, showWorkflowName = true } = Astro.props;
+
+function formatTime(time: string): string {
+  try {
+    return formatDistanceToNow(new Date(time), { addSuffix: true });
+  } catch {
+    return time;
+  }
+}
+
+function formatExecutionTime(ms?: number): string {
+  if (!ms) return 'N/A';
+  if (ms < 1000) return `${ms}ms`;
+  return `${(ms / 1000).toFixed(2)}s`;
+}
+---
+
+<div class="execution-table-container">
+  <table class="execution-table">
+    <thead>
+      <tr>
+        {showWorkflowName && <th>Workflow</th>}
+        <th>Status</th>
+        <th>Started</th>
+        <th>Duration</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {executions.length === 0 ? (
+        <tr>
+          <td colspan={showWorkflowName ? 5 : 4} class="execution-table__empty">
+            No executions found
+          </td>
+        </tr>
+      ) : (
+        executions.map((execution) => (
+          <tr>
+            {showWorkflowName && (
+              <td class="execution-table__workflow">
+                <a href={`/workflows/${execution.workflowId || 'unknown'}`}>
+                  {execution.workflowName}
+                </a>
+              </td>
+            )}
+            <td>
+              <StatusBadge status={execution.status} />
+            </td>
+            <td class="execution-table__time">{formatTime(execution.startedAt)}</td>
+            <td class="execution-table__duration">{formatExecutionTime(execution.executionTime)}</td>
+            <td>
+              <a href={`/executions/${execution.id}`} class="execution-table__link">
+                View
+              </a>
+            </td>
+          </tr>
+        ))
+      )}
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .execution-table-container {
+    background: var(--theme-surface-1);
+    border-radius: var(--theme-shape-radius);
+    overflow: hidden;
+  }
+
+  .execution-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .execution-table thead {
+    background: var(--theme-surface-2);
+  }
+
+  .execution-table th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--theme-on-surface-2);
+  }
+
+  .execution-table tbody tr {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    transition: background-color var(--theme-transition);
+  }
+
+  .execution-table tbody tr:hover {
+    background: rgba(0, 0, 0, 0.02);
+  }
+
+  .execution-table td {
+    padding: 1rem;
+    color: var(--theme-on-surface-1);
+  }
+
+  .execution-table__workflow a {
+    color: var(--theme-primary);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .execution-table__workflow a:hover {
+    text-decoration: underline;
+  }
+
+  .execution-table__time,
+  .execution-table__duration {
+    font-size: 0.875rem;
+    opacity: 0.8;
+  }
+
+  .execution-table__link {
+    color: var(--theme-primary);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.875rem;
+  }
+
+  .execution-table__link:hover {
+    text-decoration: underline;
+  }
+
+  .execution-table__empty {
+    text-align: center;
+    padding: 3rem;
+    color: var(--theme-on-surface-1);
+    opacity: 0.5;
+  }
+
+  @media (max-width: 768px) {
+    .execution-table {
+      font-size: 0.875rem;
+    }
+
+    .execution-table th,
+    .execution-table td {
+      padding: 0.75rem 0.5rem;
+    }
+  }
+</style>
+

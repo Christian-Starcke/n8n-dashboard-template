@@ -1,92 +1,271 @@
 ---
-import { Container, FeatureCard } from '@components/odyssey-theme';
-
 import Layout from '../layouts/Page.astro';
-import HomeHeroSection from '../components/sections/heros/HomeHeroSection.astro';
+import { Container } from '@components/odyssey-theme';
+import MetricCard from '../components/dashboard/MetricCard.astro';
+import DashboardGrid from '../components/dashboard/DashboardGrid.astro';
+import ExecutionTable from '../components/dashboard/ExecutionTable.astro';
+import ChartCard from '../components/dashboard/ChartCard.astro';
+import LoadingState from '../components/dashboard/LoadingState.astro';
+import EmptyState from '../components/dashboard/EmptyState.astro';
+import { createN8nClient } from '../utils/n8n/api';
+import { formatExecutionStatus, calculateSuccessRate, getAverageExecutionTime } from '../utils/n8n/helpers';
+
+const seo = {
+  title: 'Dashboard | N8N Automation',
+  description: 'N8N automation dashboard overview',
+};
+
+// In a production environment, you would fetch this data from the API
+// For now, using placeholder data that demonstrates the structure
+let workflows = [];
+let executions = [];
+let isLoading = false;
+let error = null;
+
+try {
+  // Attempt to fetch data (will fail gracefully if n8n is not configured)
+  const client = createN8nClient();
+  isLoading = true;
+  // Note: In Astro, API calls should be made in server-side code or via client-side JavaScript
+  // This is a placeholder structure - actual implementation would use Astro's server endpoints
+} catch (e) {
+  error = e;
+}
+
+// Placeholder data for demonstration
+const placeholderExecutions = [
+  {
+    id: '1',
+    workflowId: 'wf-1',
+    workflowName: 'Data Sync Workflow',
+    status: 'success' as const,
+    startedAt: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
+    finishedAt: new Date(Date.now() - 1000 * 60 * 4).toISOString(),
+    executionTime: 1200,
+  },
+  {
+    id: '2',
+    workflowId: 'wf-2',
+    workflowName: 'Email Notification',
+    status: 'running' as const,
+    startedAt: new Date(Date.now() - 1000 * 30).toISOString(),
+  },
+  {
+    id: '3',
+    workflowId: 'wf-1',
+    workflowName: 'Data Sync Workflow',
+    status: 'error' as const,
+    startedAt: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
+    finishedAt: new Date(Date.now() - 1000 * 60 * 59).toISOString(),
+    executionTime: 500,
+  },
+];
+
+// Calculate metrics from placeholder data
+const totalWorkflows = 12;
+const activeExecutions = 5;
+const successRate = calculateSuccessRate(placeholderExecutions as any);
+const avgExecutionTime = getAverageExecutionTime(placeholderExecutions as any);
+
+const metrics = [
+  {
+    title: 'Total Workflows',
+    value: totalWorkflows,
+    change: 2,
+    changeLabel: 'this month',
+    icon: 'mdi:workflow',
+  },
+  {
+    title: 'Active Executions',
+    value: activeExecutions,
+    change: -1,
+    changeLabel: 'today',
+    icon: 'mdi:play-circle',
+  },
+  {
+    title: 'Success Rate',
+    value: `${successRate}%`,
+    change: 0.5,
+    changeLabel: 'this week',
+    icon: 'mdi:check-circle',
+  },
+  {
+    title: 'Avg Execution Time',
+    value: `${(avgExecutionTime / 1000).toFixed(1)}s`,
+    change: -0.2,
+    changeLabel: 'this week',
+    icon: 'mdi:timer',
+  },
+];
 ---
 
-<Layout>
-	<HomeHeroSection />
-	<Container>
-		<section class="feature-card__section">
-			<h2>Landing Pages</h2>
-			<p>
-				Use one of our landing pages to jumpstart your website or
-				ad campaign.
-			</p>
-			<div class="feature-card__grid">
-				<FeatureCard href="/landing-pages/landing-1" title="Landing Page 1" imgSrc="/assets/images/home/screenshots/landing-1">
-				</FeatureCard>
-				<FeatureCard href="/landing-pages/landing-2" title="Landing Page 2" imgSrc="/assets/images/home/screenshots/landing-2">
-				</FeatureCard>
-			</div>
-		</section>
-	</Container>
+<Layout {seo}>
+  <Container>
+    <div class="dashboard-header">
+      <h1>Dashboard Overview</h1>
+      <p class="dashboard-subtitle">Monitor your n8n automation workflows and executions</p>
+    </div>
 
-	<Container>
-		<section class="feature-card__section">
-			<h2>Company Pages</h2>
-			<p>
-				Use one of our prebuilt company pages for your about page, contact page,
-				legal pages, blog posts, etc.
-			</p>
-			<div class="feature-card__grid">
-				<FeatureCard href="/company/about" title="About Page" imgSrc="/assets/images/home/screenshots/about">
-				</FeatureCard>
-				<FeatureCard href="/company/contact" title="Contact Page" imgSrc="/assets/images/home/screenshots/contact">
-				</FeatureCard>
-				<FeatureCard href="/blog/" title="Blog Page" imgSrc="/assets/images/home/screenshots/blog">
-				</FeatureCard>
-				<FeatureCard
-					href="/blog/posts/remote-work-mental-health"
-					title="Blog Post"
-          imgSrc="/assets/images/home/screenshots/blog-post"
-				>
-				</FeatureCard>
-				<FeatureCard
-					href="/company/legal"
-					imgSrc="/assets/images/home/screenshots/legal"
-					title="Legal Page"
-				>
-				</FeatureCard>
-			</div>
-		</section>
-	</Container>
+    {isLoading ? (
+      <LoadingState message="Loading dashboard data..." />
+    ) : error ? (
+      <div class="dashboard-error">
+        <p>Unable to connect to n8n API. Please configure your n8n instance in the environment variables.</p>
+        <p class="dashboard-error__hint">Set PUBLIC_N8N_BASE_URL and optionally PUBLIC_N8N_API_KEY in your .env file</p>
+      </div>
+    ) : (
+      <>
+        <DashboardGrid columns={4}>
+          {metrics.map((metric) => (
+            <MetricCard {...metric} />
+          ))}
+        </DashboardGrid>
 
-	<Container>
-		<section class="feature-card__section">
-			<h2>Theme Pages</h2>
-			<p>Learn more about how to set up and use the Odyssey Theme.</p>
-			<div class="feature-card__grid">
-				<FeatureCard
-					href="/theme/get-started"
-					imgSrc="/assets/images/home/screenshots/get-started"
-					title="Get Started"
-				>
-				</FeatureCard>
-				<FeatureCard
-					href="/theme/style-guide"
-					imgSrc="/assets/images/home/screenshots/style-guide"
-					title="Style Guide"
-				>
-				</FeatureCard>
-			</div>
-		</section>
-	</Container>
+        <section class="dashboard-section">
+          <div class="dashboard-section__header">
+            <h2>Recent Executions</h2>
+            <a href="/executions" class="dashboard-section__link">View All</a>
+          </div>
+          {placeholderExecutions.length > 0 ? (
+            <ExecutionTable executions={placeholderExecutions} />
+          ) : (
+            <EmptyState
+              title="No executions yet"
+              message="Workflow executions will appear here once you start running workflows."
+              actionLabel="View Workflows"
+              actionHref="/workflows"
+            />
+          )}
+        </section>
+
+        <section class="dashboard-section">
+          <h2>Quick Actions</h2>
+          <div class="dashboard-actions">
+            <a href="/workflows" class="dashboard-action">
+              <span class="dashboard-action__icon">📋</span>
+              <span class="dashboard-action__text">Manage Workflows</span>
+            </a>
+            <a href="/workflows/new" class="dashboard-action">
+              <span class="dashboard-action__icon">➕</span>
+              <span class="dashboard-action__text">Create Workflow</span>
+            </a>
+            <a href="/executions" class="dashboard-action">
+              <span class="dashboard-action__icon">📊</span>
+              <span class="dashboard-action__text">View Executions</span>
+            </a>
+            <a href="/settings" class="dashboard-action">
+              <span class="dashboard-action__icon">⚙️</span>
+              <span class="dashboard-action__text">Settings</span>
+            </a>
+          </div>
+        </section>
+      </>
+    )}
+  </Container>
 </Layout>
 
 <style>
-	.feature-card__section {
-		margin: var(--section-margin) auto;
-	}
-	.feature-card__grid {
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: var(--theme-grid-gap);
-	}
-	@media (max-width: 768px) {
-		.feature-card__grid {
-			grid-template-columns: 1fr;
-		}
-	}
+  .dashboard-header {
+    margin-bottom: 2rem;
+  }
+
+  .dashboard-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--theme-on-bg);
+    margin: 0 0 0.5rem 0;
+  }
+
+  .dashboard-subtitle {
+    font-size: 1rem;
+    color: var(--theme-on-bg);
+    opacity: 0.7;
+    margin: 0;
+  }
+
+  .dashboard-section {
+    margin-top: 3rem;
+  }
+
+  .dashboard-section__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .dashboard-section__header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--theme-on-bg);
+    margin: 0;
+  }
+
+  .dashboard-section__link {
+    color: var(--theme-primary);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.875rem;
+  }
+
+  .dashboard-section__link:hover {
+    text-decoration: underline;
+  }
+
+  .dashboard-error {
+    background: var(--theme-surface-1);
+    border-radius: var(--theme-shape-radius);
+    padding: 2rem;
+    text-align: center;
+    color: var(--theme-on-surface-1);
+  }
+
+  .dashboard-error__hint {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    opacity: 0.7;
+  }
+
+  .dashboard-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .dashboard-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.5rem;
+    background: var(--theme-surface-1);
+    border-radius: var(--theme-shape-radius);
+    text-decoration: none;
+    color: var(--theme-on-surface-1);
+    transition: transform var(--theme-transition), box-shadow var(--theme-transition);
+  }
+
+  .dashboard-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .dashboard-action__icon {
+    font-size: 2rem;
+  }
+
+  .dashboard-action__text {
+    font-weight: 500;
+    font-size: 0.875rem;
+  }
+
+  @media (max-width: 768px) {
+    .dashboard-header h1 {
+      font-size: 1.5rem;
+    }
+
+    .dashboard-actions {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>

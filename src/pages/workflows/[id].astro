@@ -1,0 +1,194 @@
+---
+import Layout from '../../layouts/Page.astro';
+import { Container, Button } from '@components/odyssey-theme';
+import StatusBadge from '../../components/dashboard/StatusBadge.astro';
+import ExecutionTable from '../../components/dashboard/ExecutionTable.astro';
+import { createN8nClient } from '../../utils/n8n/api';
+
+export async function getStaticPaths() {
+  // In production, fetch workflow IDs from API
+  return [
+    { params: { id: 'wf-1' } },
+    { params: { id: 'wf-2' } },
+    { params: { id: 'wf-3' } },
+    { params: { id: 'wf-4' } },
+  ];
+}
+
+const { id } = Astro.params;
+
+const seo = {
+  title: `Workflow ${id} | N8N Automation`,
+  description: `View details for workflow ${id}`,
+};
+
+// Placeholder workflow data
+const workflow = {
+  id: id || 'unknown',
+  name: 'Data Sync Workflow',
+  active: true,
+  createdAt: '2024-01-15T10:00:00Z',
+  updatedAt: '2024-12-12T14:30:00Z',
+};
+
+const workflowExecutions = [
+  {
+    id: 'exec-1',
+    workflowId: id || 'unknown',
+    workflowName: workflow.name,
+    status: 'success' as const,
+    startedAt: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
+    finishedAt: new Date(Date.now() - 1000 * 60 * 4).toISOString(),
+    executionTime: 1200,
+  },
+  {
+    id: 'exec-2',
+    workflowId: id || 'unknown',
+    workflowName: workflow.name,
+    status: 'success' as const,
+    startedAt: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
+    finishedAt: new Date(Date.now() - 1000 * 60 * 29).toISOString(),
+    executionTime: 1100,
+  },
+];
+---
+
+<Layout {seo}>
+  <Container>
+    <div class="workflow-detail-header">
+      <div>
+        <div class="workflow-detail-title-group">
+          <h1>{workflow.name}</h1>
+          <StatusBadge status={workflow.active ? 'success' : 'canceled'} label={workflow.active ? 'Active' : 'Inactive'} />
+        </div>
+        <p class="workflow-detail-id">ID: {workflow.id}</p>
+      </div>
+      <div class="workflow-detail-actions">
+        <Button href={`/workflows/${id}/edit`}>Edit</Button>
+        <Button href={`/workflows/${id}/execute`} variant="primary">Execute Now</Button>
+      </div>
+    </div>
+
+    <section class="workflow-detail-section">
+      <h2>Recent Executions</h2>
+      <ExecutionTable executions={workflowExecutions} showWorkflowName={false} />
+    </section>
+
+    <section class="workflow-detail-section">
+      <h2>Workflow Information</h2>
+      <div class="workflow-info-grid">
+        <div class="workflow-info-item">
+          <span class="workflow-info-label">Created</span>
+          <span class="workflow-info-value">{new Date(workflow.createdAt).toLocaleDateString()}</span>
+        </div>
+        <div class="workflow-info-item">
+          <span class="workflow-info-label">Last Updated</span>
+          <span class="workflow-info-value">{new Date(workflow.updatedAt).toLocaleDateString()}</span>
+        </div>
+        <div class="workflow-info-item">
+          <span class="workflow-info-label">Status</span>
+          <span class="workflow-info-value">
+            <StatusBadge status={workflow.active ? 'success' : 'canceled'} label={workflow.active ? 'Active' : 'Inactive'} />
+          </span>
+        </div>
+      </div>
+    </section>
+  </Container>
+</Layout>
+
+<style>
+  .workflow-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .workflow-detail-title-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .workflow-detail-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--theme-on-bg);
+    margin: 0;
+  }
+
+  .workflow-detail-id {
+    font-size: 0.875rem;
+    color: var(--theme-on-bg);
+    opacity: 0.6;
+    margin: 0;
+    font-family: monospace;
+  }
+
+  .workflow-detail-actions {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .workflow-detail-section {
+    margin-top: 2rem;
+  }
+
+  .workflow-detail-section h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--theme-on-bg);
+    margin: 0 0 1.5rem 0;
+  }
+
+  .workflow-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    background: var(--theme-surface-1);
+    border-radius: var(--theme-shape-radius);
+    padding: 1.5rem;
+  }
+
+  .workflow-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .workflow-info-label {
+    font-size: 0.875rem;
+    color: var(--theme-on-surface-1);
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .workflow-info-value {
+    font-size: 1rem;
+    color: var(--theme-on-surface-1);
+    font-weight: 500;
+  }
+
+  @media (max-width: 768px) {
+    .workflow-detail-header {
+      flex-direction: column;
+    }
+
+    .workflow-detail-header h1 {
+      font-size: 1.5rem;
+    }
+
+    .workflow-detail-actions {
+      width: 100%;
+    }
+
+    .workflow-detail-actions :global(button) {
+      flex: 1;
+    }
+  }
+</style>
+

@@ -30,3 +30,13 @@ export { default as BlogPostPreview } from './blog/BlogPostPreview.astro';
 export { default as FormInput } from './form-fields/FormInput.astro';
 export { default as FormTextarea } from './form-fields/FormTextarea.astro';
 export { default as FormSelect } from './form-fields/FormSelect.astro';
+
+// Dashboard Components
+export { default as MetricCard } from './dashboard/MetricCard.astro';
+export { default as StatusBadge } from './dashboard/StatusBadge.astro';
+export { default as WorkflowCard } from './dashboard/WorkflowCard.astro';
+export { default as ExecutionTable } from './dashboard/ExecutionTable.astro';
+export { default as ChartCard } from './dashboard/ChartCard.astro';
+export { default as DashboardGrid } from './dashboard/DashboardGrid.astro';
+export { default as LoadingState } from './dashboard/LoadingState.astro';
+export { default as EmptyState } from './dashboard/EmptyState.astro';

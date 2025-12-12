@@ -1,0 +1,101 @@
+---
+import { Icon } from 'astro-icon/components';
+
+export interface Props {
+  title: string;
+  value: string | number;
+  change?: number;
+  changeLabel?: string;
+  icon?: string;
+}
+
+const { title, value, change, changeLabel, icon } = Astro.props;
+---
+
+<div class="metric-card">
+  {icon && (
+    <div class="metric-card__icon">
+      <Icon name={icon} />
+    </div>
+  )}
+  <div class="metric-card__content">
+    <p class="metric-card__title">{title}</p>
+    <p class="metric-card__value">{value}</p>
+    {change !== undefined && (
+      <p class="metric-card__change" data-change={change >= 0 ? 'positive' : 'negative'}>
+        {change >= 0 ? '+' : ''}{change}% {changeLabel || ''}
+      </p>
+    )}
+  </div>
+</div>
+
+<style>
+  .metric-card {
+    background: var(--theme-surface-1);
+    border-radius: var(--theme-shape-radius);
+    padding: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    transition: transform var(--theme-transition), box-shadow var(--theme-transition);
+  }
+  
+  .metric-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .metric-card__icon {
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--theme-primary);
+    color: var(--theme-on-primary);
+    border-radius: 0.5rem;
+  }
+
+  .metric-card__icon :global(svg) {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .metric-card__content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .metric-card__title {
+    font-size: 0.875rem;
+    color: var(--theme-on-surface-1);
+    opacity: 0.7;
+    margin: 0 0 0.5rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .metric-card__value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--theme-primary);
+    margin: 0 0 0.25rem 0;
+    line-height: 1.2;
+  }
+
+  .metric-card__change {
+    font-size: 0.875rem;
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .metric-card__change[data-change="positive"] {
+    color: #22c55e;
+  }
+
+  .metric-card__change[data-change="negative"] {
+    color: #ef4444;
+  }
+</style>
+

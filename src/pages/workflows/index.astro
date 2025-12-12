@@ -1,0 +1,130 @@
+---
+import Layout from '../../layouts/Page.astro';
+import { Container, Button } from '@components/odyssey-theme';
+import WorkflowCard from '../../components/dashboard/WorkflowCard.astro';
+import LoadingState from '../../components/dashboard/LoadingState.astro';
+import EmptyState from '../../components/dashboard/EmptyState.astro';
+import { createN8nClient } from '../../utils/n8n/api';
+
+const seo = {
+  title: 'Workflows | N8N Automation',
+  description: 'Manage your n8n workflows',
+};
+
+// Placeholder data for demonstration
+const placeholderWorkflows = [
+  {
+    id: 'wf-1',
+    name: 'Data Sync Workflow',
+    active: true,
+    executionCount: 142,
+    lastExecution: {
+      status: 'success' as const,
+      time: '5 minutes ago',
+    },
+  },
+  {
+    id: 'wf-2',
+    name: 'Email Notification System',
+    active: true,
+    executionCount: 89,
+    lastExecution: {
+      status: 'running' as const,
+      time: '30 seconds ago',
+    },
+  },
+  {
+    id: 'wf-3',
+    name: 'Database Backup',
+    active: false,
+    executionCount: 12,
+    lastExecution: {
+      status: 'success' as const,
+      time: '2 days ago',
+    },
+  },
+  {
+    id: 'wf-4',
+    name: 'API Integration',
+    active: true,
+    executionCount: 256,
+    lastExecution: {
+      status: 'error' as const,
+      time: '1 hour ago',
+    },
+  },
+];
+---
+
+<Layout {seo}>
+  <Container>
+    <div class="workflows-header">
+      <div>
+        <h1>Workflows</h1>
+        <p class="workflows-subtitle">Manage and monitor your automation workflows</p>
+      </div>
+      <Button href="/workflows/new">Create Workflow</Button>
+    </div>
+
+    {placeholderWorkflows.length > 0 ? (
+      <div class="workflows-grid">
+        {placeholderWorkflows.map((workflow) => (
+          <WorkflowCard {...workflow} />
+        ))}
+      </div>
+    ) : (
+      <EmptyState
+        title="No workflows yet"
+        message="Create your first workflow to get started with automation."
+        actionLabel="Create Workflow"
+        actionHref="/workflows/new"
+      />
+    )}
+  </Container>
+</Layout>
+
+<style>
+  .workflows-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .workflows-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--theme-on-bg);
+    margin: 0 0 0.5rem 0;
+  }
+
+  .workflows-subtitle {
+    font-size: 1rem;
+    color: var(--theme-on-bg);
+    opacity: 0.7;
+    margin: 0;
+  }
+
+  .workflows-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .workflows-header {
+      flex-direction: column;
+    }
+
+    .workflows-header h1 {
+      font-size: 1.5rem;
+    }
+
+    .workflows-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+

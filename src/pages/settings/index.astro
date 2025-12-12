@@ -1,0 +1,109 @@
+---
+import Layout from '../../layouts/Page.astro';
+import { Container, FormInput, Button } from '@components/odyssey-theme';
+
+const seo = {
+  title: 'Settings | N8N Automation',
+  description: 'Configure your n8n dashboard settings',
+};
+---
+
+<Layout {seo}>
+  <Container>
+    <div class="settings-header">
+      <h1>Settings</h1>
+      <p class="settings-subtitle">Configure your n8n dashboard and API connection</p>
+    </div>
+
+    <section class="settings-section">
+      <h2>N8N API Configuration</h2>
+      <div class="settings-form">
+        <FormInput
+          label="N8N Base URL"
+          name="n8nBaseUrl"
+          type="url"
+          placeholder="http://localhost:5678"
+          value={import.meta.env.PUBLIC_N8N_BASE_URL || ''}
+        />
+        <FormInput
+          label="API Key (Optional)"
+          name="n8nApiKey"
+          type="password"
+          placeholder="Enter your n8n API key"
+          value={import.meta.env.PUBLIC_N8N_API_KEY ? '••••••••' : ''}
+        />
+        <p class="settings-hint">
+          Configure these values in your environment variables (.env file) or Vercel project settings.
+        </p>
+        <Button>Save Settings</Button>
+      </div>
+    </section>
+
+    <section class="settings-section">
+      <h2>Dashboard Preferences</h2>
+      <div class="settings-form">
+        <p class="settings-hint">
+          Dashboard preferences and customization options will be available here.
+        </p>
+      </div>
+    </section>
+  </Container>
+</Layout>
+
+<style>
+  .settings-header {
+    margin-bottom: 2rem;
+  }
+
+  .settings-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--theme-on-bg);
+    margin: 0 0 0.5rem 0;
+  }
+
+  .settings-subtitle {
+    font-size: 1rem;
+    color: var(--theme-on-bg);
+    opacity: 0.7;
+    margin: 0;
+  }
+
+  .settings-section {
+    margin-top: 2rem;
+    background: var(--theme-surface-1);
+    border-radius: var(--theme-shape-radius);
+    padding: 2rem;
+  }
+
+  .settings-section h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--theme-on-surface-1);
+    margin: 0 0 1.5rem 0;
+  }
+
+  .settings-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .settings-hint {
+    font-size: 0.875rem;
+    color: var(--theme-on-surface-1);
+    opacity: 0.7;
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    .settings-header h1 {
+      font-size: 1.5rem;
+    }
+
+    .settings-section {
+      padding: 1.5rem;
+    }
+  }
+</style>
+

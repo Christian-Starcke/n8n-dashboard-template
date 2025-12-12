@@ -1,0 +1,62 @@
+---
+export interface Props {
+  title: string;
+  description?: string;
+  height?: string;
+}
+
+const { title, description, height = '300px' } = Astro.props;
+---
+
+<div class="chart-card">
+  <div class="chart-card__header">
+    <h3 class="chart-card__title">{title}</h3>
+    {description && <p class="chart-card__description">{description}</p>}
+  </div>
+  <div class="chart-card__content" style={`height: ${height}`}>
+    <slot />
+  </div>
+</div>
+
+<style>
+  .chart-card {
+    background: var(--theme-surface-1);
+    border-radius: var(--theme-shape-radius);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chart-card__header {
+    margin-bottom: 1rem;
+  }
+
+  .chart-card__title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--theme-on-surface-1);
+    margin: 0 0 0.25rem 0;
+  }
+
+  .chart-card__description {
+    font-size: 0.875rem;
+    color: var(--theme-on-surface-1);
+    opacity: 0.7;
+    margin: 0;
+  }
+
+  .chart-card__content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+  }
+
+  .chart-card__content :global(canvas),
+  .chart-card__content :global(svg) {
+    max-width: 100%;
+    height: auto;
+  }
+</style>
+

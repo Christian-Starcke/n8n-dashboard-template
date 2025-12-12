@@ -1,0 +1,61 @@
+---
+export interface Props {
+  message?: string;
+  size?: 'small' | 'medium' | 'large';
+}
+
+const { message = 'Loading...', size = 'medium' } = Astro.props;
+---
+
+<div class="loading-state" data-size={size}>
+  <div class="loading-state__spinner"></div>
+  {message && <p class="loading-state__message">{message}</p>}
+</div>
+
+<style>
+  .loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    gap: 1rem;
+  }
+
+  .loading-state__spinner {
+    border: 3px solid var(--theme-surface-1);
+    border-top: 3px solid var(--theme-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  .loading-state[data-size="small"] .loading-state__spinner {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-width: 2px;
+  }
+
+  .loading-state[data-size="medium"] .loading-state__spinner {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .loading-state[data-size="large"] .loading-state__spinner {
+    width: 4rem;
+    height: 4rem;
+    border-width: 4px;
+  }
+
+  .loading-state__message {
+    color: var(--theme-on-bg);
+    opacity: 0.7;
+    margin: 0;
+    font-size: 0.875rem;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+</style>
+
