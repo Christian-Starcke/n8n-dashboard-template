@@ -8,5 +8,8 @@
 
 	if (localStorageTheme !== null) {
 		doc.setAttribute('data-theme', localStorageTheme);
+	} else {
+		// Default to Earth theme
+		doc.setAttribute('data-theme', 'earth');
 	}
 </script>

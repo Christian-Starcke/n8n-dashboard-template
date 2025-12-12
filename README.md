@@ -1,71 +1,93 @@
-<p align="center">
-  <img src="assets/gh-banner.png" alt="Odyssey Theme Banner">
-</p>
+# N8N Automation Dashboard Template
 
-<br/>
-<div align="center">
-  <a href="https://twitter.com/jaydanurwin">
-  <img src="assets/twitter-badge.svg" alt="Follow Jaydan Urwin on Twitter"/>
-</a>
-  <a href="https://sapling.lemonsqueezy.com/checkout/buy/9b78751f-6382-442d-ac99-32c2318b70a0">
-    <img src="assets/sponsor-badge.svg" alt="Sponsor This Repo" />
-  </a>
-</div>
-<br/>
-
-# Odyssey Theme
-
-Odyssey Theme is a modern theme/starter for a business or startup's marketing website. It provides landing page examples, a full-featured blog, contact forms, and more. It is fully themeable to match your business' branding and style. It even includes a theme switcher component to show how easily the entire style of the site can be changed with only a few lines of CSS.
+A modern, full-featured frontend template for n8n automation projects, built with [Odyssey Theme](https://github.com/treefarmstudio/odyssey-theme) and Astro. This template provides a solid foundation for building dashboards and UIs for your n8n automation workflows.
 
 ## Features
 
-<p align="center">
-  <img src="assets/lh-screenshot.png" alt="Screenshot of perfect score in Lighthouse benchmark">
-</p>
+- ✅ **Perfect Lighthouse Score** - Optimized for performance
+- ✅ **Blazing Fast Performance** - Built with Astro 🚀
+- ✅ **Earth Theme (Default)** - Beautiful green-themed design perfect for dashboards
+- ✅ **Fully Themeable** - Easy customization with CSS custom properties
+- ✅ **Responsive Design** - Mobile-friendly layouts
+- ✅ **SEO Best Practices** - Open Graph, Canonical URLs, sitemap
+- ✅ **Ready-to-Use Components** - Dashboard components, cards, forms, and more
+- ✅ **Theme Switcher** - Switch between Classic, Dark, Earth, Ocean, and Sand themes
 
-
-- ✅ **A perfect score in Lighthouse**
-- ✅ **Blazing fast performance thanks to Astro 🚀**
-- ✅ **A Full Featured Blog with Tagging**
-- ✅ **Fully theme-able styles with for buttons, shapes, backgrounds, surfaces, etc.**
-- ✅ **Responsive, mobile-friendly landing pages**
-- ✅ **SEO Best Practices (Open Graph, Canonical URLs, sitemap)**
-- ✅ **Performant Local Fonts Setup**
-- ✅ **Contact Forms Setup for Netlify, Formspree, Formspark, etc.**
-- ✅ **A package of ready-to-use UI components**
-
-
-## Demo
-
-View a [live demo](https://odyssey-theme.sapling.supply/) of the Odyssey Theme.
-
-## Documentation
-
-1. View the [Theme Setup Guide](https://odyssey-theme.sapling.supply/theme/theme-setup)
-2. View the [Customizing the Theme Guide](https://odyssey-theme.sapling.supply/theme/customizing-odyssey)
-
-## Usage
+## Quick Start
 
 ```bash
-cd theme
-
+# Install dependencies
 npm install
 
+# Start development server
 npm start
+# or
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
 ```
 
-## Deploy
+## Configuration
 
-Feel free to deploy and host your site on your favorite static hosting service such as Netlify, Firebase Hosting, Vercel, GitHub Pages, etc.
+### Update Site Settings
 
-Astro has [an in-depth guide](https://docs.astro.build/en/guides/deploy/) on how to deploy an Astro project to each service.
+Edit `src/config/settings.js` to customize:
+- Site title and description
+- Site URL (for sitemap generation)
+- Brand name
+- Theme switcher visibility
 
-## Sponsor
+### Update Deployment URL
 
-If you find this theme useful, please consider donating to support the continued development of it with the link below
+Edit `astro.config.mjs` to set your production site URL for sitemap generation.
 
-[Donate to Odyssey Theme](https://sapling.lemonsqueezy.com/checkout/buy/9b78751f-6382-442d-ac99-32c2318b70a0)
+### Default Theme
+
+This template is configured with the **Earth theme** as the default. The Earth theme features:
+- Green primary colors (#2c3e2d)
+- Light background (#eeeff1)
+- Professional, dashboard-friendly aesthetic
+
+You can change the default theme by editing:
+- `src/components/theme-switcher/ThemeProvider.astro` - Sets initial theme
+- `src/components/theme-switcher/theme-switcher.ts` - Sets default when no preference is saved
+
+## Customization for N8N Projects
+
+This template is ready to be customized for your n8n automation projects:
+
+1. **Dashboard Layouts** - Convert landing pages to dashboard views
+2. **API Integration** - Connect to n8n API for workflow data
+3. **Data Visualization** - Add charts and metrics components
+4. **Workflow Management** - Build UI for managing n8n workflows
+
+## Deploy to Vercel
+
+This template is ready to deploy to Vercel:
+
+1. Push your code to GitHub
+2. Import the project in Vercel
+3. Vercel will automatically detect Astro and configure the build
+
+Or use the Vercel CLI:
+```bash
+vercel
+```
+
+## Based on Odyssey Theme
+
+This template is based on the excellent [Odyssey Theme](https://github.com/treefarmstudio/odyssey-theme) by [treefarmstudio](https://github.com/treefarmstudio). 
+
+## License
+
+See the original [Odyssey Theme LICENSE](LICENSE) file.
 
 ## Support
 
-Please feel free to post issues or submit PRs to this repo and we will do our best to respond in a timely manner, keeping in mind this template is offered for free as is on GitHub.
+For issues related to this n8n template, please open an issue in this repository.
+
+For issues related to the underlying Odyssey Theme, please refer to the [original repository](https://github.com/treefarmstudio/odyssey-theme).
