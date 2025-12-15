@@ -4,19 +4,14 @@ export const footerSocials = [
     url: 'https://github.com/Christian-Starcke/n8n-dashboard-template',
     icon: "mdi:github",
   },
-  {
-    name: 'Documentation',
-    url: 'https://github.com/Christian-Starcke/n8n-dashboard-template#readme',
-    icon: "mdi:book-open",
-  },
 ]
 
 export const footerLists = [
 	{
-		title: 'Dashboard',
+		title: 'Navigation',
 		items: [
 			{
-				title: 'Overview',
+				title: 'Dashboard',
 				slug: '/',
 			},
 			{
@@ -27,31 +22,18 @@ export const footerLists = [
 				title: 'Leads',
 				slug: '/leads',
 			},
-		],
-	},
-	{
-		title: 'Tools',
-		items: [
 			{
 				title: 'Upload CSV',
 				slug: '/upload-csv',
 			},
-			{
-				title: 'Settings',
-				slug: '/settings',
-			},
 		],
 	},
 	{
-		title: 'Resources',
+		title: 'Settings',
 		items: [
 			{
-				title: 'Documentation',
-				slug: 'https://github.com/Christian-Starcke/n8n-dashboard-template#readme',
-			},
-			{
-				title: 'GitHub',
-				slug: 'https://github.com/Christian-Starcke/n8n-dashboard-template',
+				title: 'Settings',
+				slug: '/settings',
 			},
 		],
 	},
