@@ -1,80 +1,62 @@
 export const footerSocials = [
   {
-    name: 'Twitter',
-    url: 'https://twitter.com/jaydanurwin',
-    icon: "mdi:twitter",
-  },
-  {
-    name: 'Youtube',
-    url: 'https://youtube.com/@jaydanurwin',
-    icon: "mdi:youtube",
-  },
-  {
-    name: 'Github',
-    url: 'https://github.com/jaydanurwin',
+    name: 'GitHub',
+    url: 'https://github.com/Christian-Starcke/n8n-dashboard-template',
     icon: "mdi:github",
   },
   {
-    name: 'Discord',
-    url: 'https://astro.build/chat',
-    icon: "ic:baseline-discord",
+    name: 'Documentation',
+    url: 'https://github.com/Christian-Starcke/n8n-dashboard-template#readme',
+    icon: "mdi:book-open",
   },
 ]
 
 export const footerLists = [
 	{
-		title: 'Landing Pages',
+		title: 'Dashboard',
 		items: [
 			{
-				title: 'Landing Page 1',
-				slug: '/landing-pages/landing-1',
+				title: 'Overview',
+				slug: '/',
 			},
 			{
-				title: 'Landing Page 2',
-				slug: '/landing-pages/landing-2',
-			},
-      // {
-			// 	title: 'Landing Page 3',
-			// 	slug: '/landing-pages/landing-3',
-			// },
-		],
-	},
-	{
-		title: 'Company',
-		items: [
-			{
-				title: 'About',
-				slug: '/company/about',
+				title: 'Workflows',
+				slug: '/workflows',
 			},
 			{
-				title: 'Blog',
-				slug: '/blog',
-			},
-			{
-				title: 'Contact',
-				slug: '/company/contact',
+				title: 'Executions',
+				slug: '/executions',
 			},
 		],
 	},
 	{
-		title: 'Theme',
+		title: 'Resources',
 		items: [
 			{
-				title: 'Get Started',
-				slug: '/theme/get-started',
+				title: 'Settings',
+				slug: '/settings',
 			},
 			{
-				title: 'Style Guide',
-				slug: '/theme/style-guide',
+				title: 'Documentation',
+				slug: 'https://github.com/Christian-Starcke/n8n-dashboard-template#readme',
 			},
-      {
-        title: 'Theme Setup',
-        slug: '/theme/theme-setup',
-      },
-      {
-        title: 'Customizing Odyssey',
-        slug: '/theme/customizing-odyssey',
-      }
+			{
+				title: 'GitHub',
+				slug: 'https://github.com/Christian-Starcke/n8n-dashboard-template',
+			},
+		],
+	},
+	{
+		title: 'About',
+		items: [
+			{
+				title: 'Template Info',
+				slug: 'https://github.com/Christian-Starcke/n8n-dashboard-template',
+			},
+			{
+				title: 'Odyssey Theme',
+				slug: 'https://github.com/treefarmstudio/odyssey-theme',
+			},
 		],
 	},
 ];

@@ -33,11 +33,12 @@ const { title, value, change, changeLabel, icon } = Astro.props;
   .metric-card {
     background: var(--theme-surface-1);
     border-radius: var(--theme-shape-radius);
-    padding: 1.5rem;
+    padding: 2rem;
     display: flex;
-    gap: 1rem;
+    gap: 1.25rem;
     align-items: flex-start;
     transition: transform var(--theme-transition), box-shadow var(--theme-transition);
+    min-height: 140px;
   }
   
   .metric-card:hover {
@@ -47,19 +48,19 @@ const { title, value, change, changeLabel, icon } = Astro.props;
 
   .metric-card__icon {
     flex-shrink: 0;
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 3rem;
+    height: 3rem;
     display: flex;
     align-items: center;
     justify-content: center;
     background: var(--theme-primary);
     color: var(--theme-on-primary);
-    border-radius: 0.5rem;
+    border-radius: 0.75rem;
   }
 
   .metric-card__icon :global(svg) {
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 1.75rem;
+    height: 1.75rem;
   }
 
   .metric-card__content {
@@ -71,23 +72,25 @@ const { title, value, change, changeLabel, icon } = Astro.props;
     font-size: 0.875rem;
     color: var(--theme-on-surface-1);
     opacity: 0.7;
-    margin: 0 0 0.5rem 0;
+    margin: 0 0 0.75rem 0;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    font-weight: 500;
   }
 
   .metric-card__value {
-    font-size: 2rem;
-    font-weight: bold;
+    font-size: 2.5rem;
+    font-weight: 700;
     color: var(--theme-primary);
-    margin: 0 0 0.25rem 0;
-    line-height: 1.2;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.1;
   }
 
   .metric-card__change {
-    font-size: 0.875rem;
+    font-size: 0.9375rem;
     margin: 0;
     font-weight: 500;
+    line-height: 1.4;
   }
 
   .metric-card__change[data-change="positive"] {

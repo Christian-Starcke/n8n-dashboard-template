@@ -22,15 +22,8 @@ let executions = [];
 let isLoading = false;
 let error = null;
 
-try {
-  // Attempt to fetch data (will fail gracefully if n8n is not configured)
-  const client = createN8nClient();
-  isLoading = true;
-  // Note: In Astro, API calls should be made in server-side code or via client-side JavaScript
-  // This is a placeholder structure - actual implementation would use Astro's server endpoints
-} catch (e) {
-  error = e;
-}
+// Note: In production, you would fetch data here using Astro server endpoints
+// For now, we're using placeholder data to demonstrate the dashboard structure
 
 // Placeholder data for demonstration
 const placeholderExecutions = [
@@ -166,25 +159,29 @@ const metrics = [
 
 <style>
   .dashboard-header {
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   }
 
   .dashboard-header h1 {
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: 700;
     color: var(--theme-on-bg);
-    margin: 0 0 0.5rem 0;
+    margin: 0 0 0.75rem 0;
+    line-height: 1.2;
   }
 
   .dashboard-subtitle {
-    font-size: 1rem;
+    font-size: 1.125rem;
     color: var(--theme-on-bg);
     opacity: 0.7;
     margin: 0;
+    line-height: 1.5;
   }
 
   .dashboard-section {
-    margin-top: 3rem;
+    margin-top: 4rem;
   }
 
   .dashboard-section__header {
@@ -195,10 +192,11 @@ const metrics = [
   }
 
   .dashboard-section__header h2 {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     font-weight: 600;
     color: var(--theme-on-bg);
     margin: 0;
+    line-height: 1.3;
   }
 
   .dashboard-section__link {
@@ -251,12 +249,13 @@ const metrics = [
   }
 
   .dashboard-action__icon {
-    font-size: 2rem;
+    font-size: 2.5rem;
+    line-height: 1;
   }
 
   .dashboard-action__text {
     font-weight: 500;
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
 
   @media (max-width: 768px) {
