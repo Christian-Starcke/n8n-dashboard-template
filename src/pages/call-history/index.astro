@@ -1,0 +1,286 @@
+---
+import Layout from '../../layouts/Page.astro';
+import { Container, Button } from '@components/odyssey-theme';
+import StatusBadge from '../../components/dashboard/StatusBadge.astro';
+import LoadingState from '../../components/dashboard/LoadingState.astro';
+import EmptyState from '../../components/dashboard/EmptyState.astro';
+import { formatDistanceToNow } from 'date-fns';
+
+const seo = {
+  title: 'Call History | Dashboard',
+  description: 'View and manage call history',
+};
+
+// Placeholder call history data
+const calls = [
+  {
+    id: 'call-1',
+    phoneNumber: '+1 (555) 123-4567',
+    contactName: 'John Doe',
+    duration: 245,
+    status: 'completed',
+    direction: 'outbound',
+    timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
+    notes: 'Discussed product features',
+  },
+  {
+    id: 'call-2',
+    phoneNumber: '+1 (555) 234-5678',
+    contactName: 'Jane Smith',
+    duration: 180,
+    status: 'completed',
+    direction: 'inbound',
+    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
+    notes: 'Follow-up needed',
+  },
+  {
+    id: 'call-3',
+    phoneNumber: '+1 (555) 345-6789',
+    contactName: 'Bob Johnson',
+    duration: 0,
+    status: 'missed',
+    direction: 'inbound',
+    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),
+    notes: '',
+  },
+  {
+    id: 'call-4',
+    phoneNumber: '+1 (555) 456-7890',
+    contactName: 'Alice Williams',
+    duration: 320,
+    status: 'completed',
+    direction: 'outbound',
+    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
+    notes: 'Interested in pricing',
+  },
+];
+
+function formatDuration(seconds: number): string {
+  if (seconds === 0) return '—';
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
+}
+
+function formatTime(timestamp: string): string {
+  try {
+    return formatDistanceToNow(new Date(timestamp), { addSuffix: true });
+  } catch {
+    return timestamp;
+  }
+}
+
+function getStatusBadge(status: string): 'success' | 'error' | 'running' | 'waiting' | 'canceled' {
+  switch (status) {
+    case 'completed':
+      return 'success';
+    case 'missed':
+      return 'error';
+    case 'in-progress':
+      return 'running';
+    default:
+      return 'waiting';
+  }
+}
+---
+
+<Layout {seo}>
+  <Container>
+    <div class="call-history-header">
+      <div>
+        <h1>Call History</h1>
+        <p class="call-history-subtitle">View and manage all your call records</p>
+      </div>
+      <Button href="/call-history/new">New Call</Button>
+    </div>
+
+    {calls.length > 0 ? (
+      <div class="call-history-container">
+        <table class="call-history-table">
+          <thead>
+            <tr>
+              <th>Contact</th>
+              <th>Phone Number</th>
+              <th>Direction</th>
+              <th>Duration</th>
+              <th>Status</th>
+              <th>Time</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {calls.map((call) => (
+              <tr>
+                <td class="call-history__contact">
+                  <strong>{call.contactName || 'Unknown'}</strong>
+                </td>
+                <td class="call-history__phone">{call.phoneNumber}</td>
+                <td>
+                  <span class="call-history__direction" data-direction={call.direction}>
+                    {call.direction === 'inbound' ? '📥 Inbound' : '📤 Outbound'}
+                  </span>
+                </td>
+                <td class="call-history__duration">{formatDuration(call.duration)}</td>
+                <td>
+                  <StatusBadge status={getStatusBadge(call.status)} label={call.status} />
+                </td>
+                <td class="call-history__time">{formatTime(call.timestamp)}</td>
+                <td>
+                  <a href={`/call-history/${call.id}`} class="call-history__link">View</a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    ) : (
+      <EmptyState
+        title="No call history yet"
+        message="Your call records will appear here once you start making calls."
+        actionLabel="Make a Call"
+        actionHref="/call-history/new"
+      />
+    )}
+  </Container>
+</Layout>
+
+<style>
+  .call-history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .call-history-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--theme-on-bg);
+    margin: 0 0 0.75rem 0;
+    line-height: 1.2;
+  }
+
+  .call-history-subtitle {
+    font-size: 1.125rem;
+    color: var(--theme-on-bg);
+    opacity: 0.7;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .call-history-container {
+    background: var(--theme-surface-1);
+    border-radius: var(--theme-shape-radius);
+    overflow: hidden;
+  }
+
+  .call-history-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .call-history-table thead {
+    background: var(--theme-surface-2);
+  }
+
+  .call-history-table th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--theme-on-surface-2);
+  }
+
+  .call-history-table tbody tr {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    transition: background-color var(--theme-transition);
+  }
+
+  .call-history-table tbody tr:hover {
+    background: rgba(0, 0, 0, 0.02);
+  }
+
+  .call-history-table td {
+    padding: 1rem;
+    color: var(--theme-on-surface-1);
+  }
+
+  .call-history__contact strong {
+    color: var(--theme-on-surface-1);
+    font-weight: 600;
+  }
+
+  .call-history__phone {
+    font-family: monospace;
+    font-size: 0.9375rem;
+    color: var(--theme-on-surface-1);
+    opacity: 0.8;
+  }
+
+  .call-history__direction {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .call-history__direction[data-direction="inbound"] {
+    background: #dbeafe;
+    color: #1e40af;
+  }
+
+  .call-history__direction[data-direction="outbound"] {
+    background: #dcfce7;
+    color: #166534;
+  }
+
+  .call-history__duration {
+    font-family: monospace;
+    font-weight: 500;
+    color: var(--theme-on-surface-1);
+  }
+
+  .call-history__time {
+    font-size: 0.875rem;
+    opacity: 0.8;
+    color: var(--theme-on-surface-1);
+  }
+
+  .call-history__link {
+    color: var(--theme-primary);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.875rem;
+  }
+
+  .call-history__link:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .call-history-header {
+      flex-direction: column;
+    }
+
+    .call-history-header h1 {
+      font-size: 1.5rem;
+    }
+
+    .call-history-table {
+      font-size: 0.875rem;
+    }
+
+    .call-history-table th,
+    .call-history-table td {
+      padding: 0.75rem 0.5rem;
+    }
+  }
+</style>
+

@@ -4,15 +4,15 @@ export const nav = [
 		slug: '/',
 	},
 	{
-		title: 'Workflows',
-		slug: '/workflows',
+		title: 'Call History',
+		slug: '/call-history',
 	},
 	{
-		title: 'Executions',
-		slug: '/executions',
+		title: 'Leads',
+		slug: '/leads',
 	},
 	{
-		title: 'Settings',
-		slug: '/settings',
+		title: 'Upload CSV',
+		slug: '/upload-csv',
 	},
 ];

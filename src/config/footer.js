@@ -20,12 +20,25 @@ export const footerLists = [
 				slug: '/',
 			},
 			{
-				title: 'Workflows',
-				slug: '/workflows',
+				title: 'Call History',
+				slug: '/call-history',
 			},
 			{
-				title: 'Executions',
-				slug: '/executions',
+				title: 'Leads',
+				slug: '/leads',
+			},
+		],
+	},
+	{
+		title: 'Tools',
+		items: [
+			{
+				title: 'Upload CSV',
+				slug: '/upload-csv',
+			},
+			{
+				title: 'Settings',
+				slug: '/settings',
 			},
 		],
 	},
@@ -33,29 +46,12 @@ export const footerLists = [
 		title: 'Resources',
 		items: [
 			{
-				title: 'Settings',
-				slug: '/settings',
-			},
-			{
 				title: 'Documentation',
 				slug: 'https://github.com/Christian-Starcke/n8n-dashboard-template#readme',
 			},
 			{
 				title: 'GitHub',
 				slug: 'https://github.com/Christian-Starcke/n8n-dashboard-template',
-			},
-		],
-	},
-	{
-		title: 'About',
-		items: [
-			{
-				title: 'Template Info',
-				slug: 'https://github.com/Christian-Starcke/n8n-dashboard-template',
-			},
-			{
-				title: 'Odyssey Theme',
-				slug: 'https://github.com/treefarmstudio/odyssey-theme',
 			},
 		],
 	},

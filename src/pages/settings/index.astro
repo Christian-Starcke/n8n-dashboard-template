@@ -16,26 +16,43 @@ const seo = {
     </div>
 
     <section class="settings-section">
-      <h2>N8N API Configuration</h2>
+      <h2>API Configuration</h2>
       <div class="settings-form">
         <FormInput
-          label="N8N Base URL"
-          name="n8nBaseUrl"
+          label="API Base URL"
+          name="apiBaseUrl"
           type="url"
-          placeholder="http://localhost:5678"
-          value={import.meta.env.PUBLIC_N8N_BASE_URL || ''}
+          placeholder="https://api.example.com"
+          value={import.meta.env.PUBLIC_API_BASE_URL || ''}
         />
         <FormInput
           label="API Key (Optional)"
-          name="n8nApiKey"
+          name="apiKey"
           type="password"
-          placeholder="Enter your n8n API key"
-          value={import.meta.env.PUBLIC_N8N_API_KEY ? '••••••••' : ''}
+          placeholder="Enter your API key"
+          value={import.meta.env.PUBLIC_API_KEY ? '••••••••' : ''}
         />
         <p class="settings-hint">
           Configure these values in your environment variables (.env file) or Vercel project settings.
         </p>
         <Button>Save Settings</Button>
+      </div>
+    </section>
+
+    <section class="settings-section">
+      <h2>Database Configuration</h2>
+      <div class="settings-form">
+        <FormInput
+          label="Database Connection String"
+          name="dbConnection"
+          type="text"
+          placeholder="postgresql://user:password@host:port/database"
+          value=""
+        />
+        <p class="settings-hint">
+          Configure your database connection. Keep credentials secure in environment variables.
+        </p>
+        <Button>Test Connection</Button>
       </div>
     </section>
 

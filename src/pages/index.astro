@@ -3,91 +3,76 @@ import Layout from '../layouts/Page.astro';
 import { Container } from '@components/odyssey-theme';
 import MetricCard from '../components/dashboard/MetricCard.astro';
 import DashboardGrid from '../components/dashboard/DashboardGrid.astro';
-import ExecutionTable from '../components/dashboard/ExecutionTable.astro';
-import ChartCard from '../components/dashboard/ChartCard.astro';
 import LoadingState from '../components/dashboard/LoadingState.astro';
 import EmptyState from '../components/dashboard/EmptyState.astro';
-import { createN8nClient } from '../utils/n8n/api';
-import { formatExecutionStatus, calculateSuccessRate, getAverageExecutionTime } from '../utils/n8n/helpers';
+import StatusBadge from '../components/dashboard/StatusBadge.astro';
 
 const seo = {
-  title: 'Dashboard | N8N Automation',
-  description: 'N8N automation dashboard overview',
+  title: 'Dashboard | Automation Dashboard',
+  description: 'Dashboard overview and analytics',
 };
 
-// In a production environment, you would fetch this data from the API
+// In a production environment, you would fetch this data from your API/database
 // For now, using placeholder data that demonstrates the structure
-let workflows = [];
-let executions = [];
 let isLoading = false;
 let error = null;
 
 // Note: In production, you would fetch data here using Astro server endpoints
-// For now, we're using placeholder data to demonstrate the dashboard structure
+// Connect to your backend API or database to get real data
 
-// Placeholder data for demonstration
-const placeholderExecutions = [
+// Placeholder recent activity data
+const recentActivity = [
   {
     id: '1',
-    workflowId: 'wf-1',
-    workflowName: 'Data Sync Workflow',
-    status: 'success' as const,
-    startedAt: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
-    finishedAt: new Date(Date.now() - 1000 * 60 * 4).toISOString(),
-    executionTime: 1200,
+    type: 'call',
+    title: 'Call with John Doe',
+    status: 'completed' as const,
+    timestamp: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
   },
   {
     id: '2',
-    workflowId: 'wf-2',
-    workflowName: 'Email Notification',
-    status: 'running' as const,
-    startedAt: new Date(Date.now() - 1000 * 30).toISOString(),
+    type: 'lead',
+    title: 'New lead: Jane Smith',
+    status: 'new' as const,
+    timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
   },
   {
     id: '3',
-    workflowId: 'wf-1',
-    workflowName: 'Data Sync Workflow',
-    status: 'error' as const,
-    startedAt: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
-    finishedAt: new Date(Date.now() - 1000 * 60 * 59).toISOString(),
-    executionTime: 500,
+    type: 'upload',
+    title: 'CSV import completed',
+    status: 'completed' as const,
+    timestamp: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
   },
 ];
 
-// Calculate metrics from placeholder data
-const totalWorkflows = 12;
-const activeExecutions = 5;
-const successRate = calculateSuccessRate(placeholderExecutions as any);
-const avgExecutionTime = getAverageExecutionTime(placeholderExecutions as any);
-
 const metrics = [
   {
-    title: 'Total Workflows',
-    value: totalWorkflows,
-    change: 2,
+    title: 'Total Leads',
+    value: 124,
+    change: 12,
     changeLabel: 'this month',
-    icon: 'mdi:workflow',
+    icon: 'mdi:account-group',
   },
   {
-    title: 'Active Executions',
-    value: activeExecutions,
-    change: -1,
-    changeLabel: 'today',
-    icon: 'mdi:play-circle',
+    title: 'Calls Today',
+    value: 23,
+    change: 5,
+    changeLabel: 'vs yesterday',
+    icon: 'mdi:phone',
   },
   {
-    title: 'Success Rate',
-    value: `${successRate}%`,
-    change: 0.5,
+    title: 'Conversion Rate',
+    value: '18.5%',
+    change: 2.3,
+    changeLabel: 'this week',
+    icon: 'mdi:chart-line',
+  },
+  {
+    title: 'Active Tasks',
+    value: 8,
+    change: -2,
     changeLabel: 'this week',
     icon: 'mdi:check-circle',
-  },
-  {
-    title: 'Avg Execution Time',
-    value: `${(avgExecutionTime / 1000).toFixed(1)}s`,
-    change: -0.2,
-    changeLabel: 'this week',
-    icon: 'mdi:timer',
   },
 ];
 ---
@@ -96,15 +81,15 @@ const metrics = [
   <Container>
     <div class="dashboard-header">
       <h1>Dashboard Overview</h1>
-      <p class="dashboard-subtitle">Monitor your n8n automation workflows and executions</p>
+      <p class="dashboard-subtitle">Monitor your data, leads, and activity at a glance</p>
     </div>
 
     {isLoading ? (
       <LoadingState message="Loading dashboard data..." />
     ) : error ? (
       <div class="dashboard-error">
-        <p>Unable to connect to n8n API. Please configure your n8n instance in the environment variables.</p>
-        <p class="dashboard-error__hint">Set PUBLIC_N8N_BASE_URL and optionally PUBLIC_N8N_API_KEY in your .env file</p>
+        <p>Unable to load dashboard data. Please check your configuration.</p>
+        <p class="dashboard-error__hint">Configure your API endpoints and database connections in the settings.</p>
       </div>
     ) : (
       <>
@@ -116,17 +101,37 @@ const metrics = [
 
         <section class="dashboard-section">
           <div class="dashboard-section__header">
-            <h2>Recent Executions</h2>
-            <a href="/executions" class="dashboard-section__link">View All</a>
+            <h2>Recent Activity</h2>
+            <a href="/call-history" class="dashboard-section__link">View All</a>
           </div>
-          {placeholderExecutions.length > 0 ? (
-            <ExecutionTable executions={placeholderExecutions} />
+          {recentActivity.length > 0 ? (
+            <div class="activity-list">
+              {recentActivity.map((activity) => (
+                <div class="activity-item">
+                  <div class="activity-item__icon">
+                    {activity.type === 'call' && '📞'}
+                    {activity.type === 'lead' && '👤'}
+                    {activity.type === 'upload' && '📤'}
+                  </div>
+                  <div class="activity-item__content">
+                    <strong class="activity-item__title">{activity.title}</strong>
+                    <span class="activity-item__time">
+                      {new Date(activity.timestamp).toLocaleString()}
+                    </span>
+                  </div>
+                  <StatusBadge 
+                    status={activity.status === 'completed' ? 'success' : activity.status === 'new' ? 'waiting' : 'running'} 
+                    label={activity.status}
+                  />
+                </div>
+              ))}
+            </div>
           ) : (
             <EmptyState
-              title="No executions yet"
-              message="Workflow executions will appear here once you start running workflows."
-              actionLabel="View Workflows"
-              actionHref="/workflows"
+              title="No recent activity"
+              message="Your recent calls and activities will appear here."
+              actionLabel="View Call History"
+              actionHref="/call-history"
             />
           )}
         </section>
@@ -134,17 +139,17 @@ const metrics = [
         <section class="dashboard-section">
           <h2>Quick Actions</h2>
           <div class="dashboard-actions">
-            <a href="/workflows" class="dashboard-action">
-              <span class="dashboard-action__icon">📋</span>
-              <span class="dashboard-action__text">Manage Workflows</span>
+            <a href="/leads" class="dashboard-action">
+              <span class="dashboard-action__icon">👥</span>
+              <span class="dashboard-action__text">Manage Leads</span>
             </a>
-            <a href="/workflows/new" class="dashboard-action">
-              <span class="dashboard-action__icon">➕</span>
-              <span class="dashboard-action__text">Create Workflow</span>
+            <a href="/call-history" class="dashboard-action">
+              <span class="dashboard-action__icon">📞</span>
+              <span class="dashboard-action__text">Call History</span>
             </a>
-            <a href="/executions" class="dashboard-action">
-              <span class="dashboard-action__icon">📊</span>
-              <span class="dashboard-action__text">View Executions</span>
+            <a href="/upload-csv" class="dashboard-action">
+              <span class="dashboard-action__icon">📤</span>
+              <span class="dashboard-action__text">Upload CSV</span>
             </a>
             <a href="/settings" class="dashboard-action">
               <span class="dashboard-action__icon">⚙️</span>
@@ -258,6 +263,53 @@ const metrics = [
     font-size: 1rem;
   }
 
+  .activity-list {
+    background: var(--theme-surface-1);
+    border-radius: var(--theme-shape-radius);
+    overflow: hidden;
+  }
+
+  .activity-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    transition: background-color var(--theme-transition);
+  }
+
+  .activity-item:last-child {
+    border-bottom: none;
+  }
+
+  .activity-item:hover {
+    background: rgba(0, 0, 0, 0.02);
+  }
+
+  .activity-item__icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .activity-item__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .activity-item__title {
+    color: var(--theme-on-surface-1);
+    font-weight: 500;
+    font-size: 0.9375rem;
+  }
+
+  .activity-item__time {
+    font-size: 0.8125rem;
+    color: var(--theme-on-surface-1);
+    opacity: 0.6;
+  }
+
   @media (max-width: 768px) {
     .dashboard-header h1 {
       font-size: 1.5rem;
@@ -265,6 +317,10 @@ const metrics = [
 
     .dashboard-actions {
       grid-template-columns: 1fr;
+    }
+
+    .activity-item {
+      padding: 1rem;
     }
   }
 </style>
